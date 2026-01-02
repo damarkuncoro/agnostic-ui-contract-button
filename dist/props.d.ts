@@ -1,4 +1,4 @@
-import type { UiButtonVariantExtended } from "./variant";
+import type { UiButtonVariant } from "./variant";
 import type { UiButtonState } from "./state";
 import type { UiButtonA11y } from "./a11y";
 export interface UiButtonProps {
@@ -8,8 +8,7 @@ export interface UiButtonProps {
     href?: string;
     target?: string;
     rel?: string;
-    variant?: UiButtonVariantExtended;
+    variant?: UiButtonVariant;
     state?: UiButtonState;
     a11y?: UiButtonA11y;
 }
-//# sourceMappingURL=props.d.ts.map

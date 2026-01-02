@@ -1,6 +1,6 @@
 // src/props.ts
 
-import type { UiButtonVariant } from "./variant"
+import type { UiButtonVariantExtended } from "./variant"
 import type { UiButtonState } from "./state"
 import type { UiButtonA11y } from "./a11y"
 
@@ -14,7 +14,7 @@ export interface UiButtonProps {
   target?: string
   rel?: string
 
-  variant?: UiButtonVariant
+  variant?: UiButtonVariantExtended
   state?: UiButtonState
   a11y?: UiButtonA11y
 }

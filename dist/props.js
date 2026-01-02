@@ -1,0 +1,2 @@
+// src/props.ts
+export {};
