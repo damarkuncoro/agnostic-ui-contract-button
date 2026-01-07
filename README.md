@@ -1,25 +1,83 @@
 # @damarkuncoro/agnostic-ui-contract-button
 
-Framework-agnostic button component contract for Agnostic UI. This package defines the semantic interface for button components, built on top of the core contract system.
+## 🏛️ **Domain-Driven Design (DDD) Button Component Contract**
 
-## Features
+Enterprise-grade button component contract implementing **Domain-Driven Design (DDD)** principles with comprehensive business logic, accessibility compliance, and state management. Built on top of the contract-core foundation with full backward compatibility.
 
-- ✅ **Semantic Variants**: Size, intent, tone, and emphasis using core contract arrays
-- ✅ **Component-Specific Restrictions**: Button-appropriate subsets of core variants
-- ✅ **Explicit State Management**: Loading, disabled, and interaction states
-- ✅ **Accessibility-First**: ARIA roles, keyboard actions, and screen reader support
-- ✅ **Zero Implementation**: Pure TypeScript contracts, no CSS or DOM logic
-- ✅ **Type-Safe**: Full TypeScript support with semantic validation
+## ✨ **Key Features**
 
-## Installation
+### **🏛️ DDD Architecture**
+- ✅ **Domain Layer**: `Button` entity with rich business logic and state management
+- ✅ **Application Layer**: `CreateButtonUseCase` with orchestration and validation
+- ✅ **Infrastructure Layer**: `ButtonAccessibilityValidator` with WCAG compliance
+- ✅ **Clean Architecture**: Proper separation with dependency injection
+
+### **🔒 Business Logic Protection**
+- ✅ **Button Entity**: Comprehensive button lifecycle with state transitions
+- ✅ **ButtonType Value Object**: Immutable button types with semantic validation
+- ✅ **Accessibility Validation**: WCAG 2.1 AA compliance with automated checking
+- ✅ **Domain Events**: Observable button operations (`ButtonCreatedEvent`, `ButtonClickedEvent`)
+
+### **🔄 Legacy Compatibility**
+- ✅ **Backward Compatible**: All existing APIs preserved during transition
+- ✅ **Migration Helpers**: Gradual adoption with helper functions
+- ✅ **Dual Architecture**: Modern DDD + Legacy contracts
+
+### **♿ Accessibility First**
+- ✅ **WCAG 2.1 AA**: Full compliance with automated validation
+- ✅ **Keyboard Navigation**: Proper focus management and keyboard support
+- ✅ **Screen Reader**: ARIA roles and semantic markup validation
+- ✅ **Color Contrast**: Automated contrast ratio validation
+
+## 📦 **Installation**
 
 ```bash
 npm install @damarkuncoro/agnostic-ui-contract-button
 ```
 
-## Usage
+## 🚀 **DDD Architecture Usage**
 
-Import button contract types and semantic arrays:
+### **Modern DDD APIs (Recommended)**
+
+```typescript
+import {
+  Button,
+  ButtonState,
+  ButtonEmphasis,
+  ButtonType,
+  CreateButtonUseCase,
+  getCreateButtonUseCase,
+  createButtonDDD,
+  validateButtonDDD
+} from '@damarkuncoro/agnostic-ui-contract-button';
+
+// Create button using DDD use case
+const useCase = getCreateButtonUseCase();
+const result = await useCase.execute({
+  buttonType: 'submit',
+  emphasis: ButtonEmphasis.HIGH,
+  hasIcon: true,
+  iconPosition: 'start'
+});
+
+const button = result.button;
+
+// Business logic operations
+button.click('primary');
+button.changeState(ButtonState.LOADING);
+
+// Domain events
+const events = button.getDomainEvents();
+console.log('Button events:', events);
+
+// Accessibility validation
+const accessibilityResult = button.validateAccessibility();
+if (!accessibilityResult.isAccessible) {
+  console.log('Violations:', accessibilityResult.violations);
+}
+```
+
+### **Legacy Compatibility APIs (Maintained)**
 
 ```typescript
 import {
@@ -46,58 +104,45 @@ import {
   UiButtonA11y
 } from '@damarkuncoro/agnostic-ui-contract-button';
 
-// Use in component definitions
+// Use in component definitions (unchanged)
 interface MyButtonProps extends UiButtonProps {
-  // Additional framework-agnostic props
   onPress?: () => void;
   children?: unknown;
 }
-
-// Type-safe button component
-const MyButton = ({
-  size = "md",        // illustrative default; actual defaults resolved in base
-  intent = "primary", // illustrative default; actual defaults resolved in base
-  tone = "solid",     // illustrative default; actual defaults resolved in base
-  emphasis = "medium", // illustrative default; actual defaults resolved in base
-  ...props
-}: MyButtonProps) => {
-  // Implementation here - framework-specific bindings handled in provider packages
-};
-
-// Note: Framework-specific bindings (React onClick, Vue @click, etc.)
-// are implemented in the respective provider packages, not in contracts.
 ```
 
-## Semantic Arrays
+## 🏗️ **Architecture Overview**
 
-This package provides button-specific semantic arrays that are subsets of the core contract arrays:
-
-### Button Sizes
-```typescript
-uiButtonSizes // ["xs", "sm", "md", "lg", "xl"] - all core sizes available
+### **DDD Layer Structure**
+```
+contract-button/
+├── domain/                    # Domain Layer
+│   ├── button/
+│   │   ├── entities/
+│   │   │   └── Button.ts     # Button entity with business logic
+│   │   └── services/
+│   │       └── IButtonValidator.ts
+│   └── shared/
+│       ├── BaseEntity.ts     # Shared kernel
+│       ├── ValueObject.ts
+│       ├── events/
+│       │   └── DomainEvent.ts
+│       └── value-objects/
+│           └── ButtonType.ts # ButtonType VO
+├── application/               # Application Layer
+│   └── use-cases/
+│       └── CreateButtonUseCase.ts
+├── infrastructure/            # Infrastructure Layer
+│   └── validators/
+│       └── ButtonAccessibilityValidator.ts
+└── bootstrap.ts              # Dependency Injection
 ```
 
-### Button Intents
-```typescript
-uiButtonIntents // ["primary", "secondary", "success", "warning", "danger", "neutral"] - all core intents available
+### **Contract Hierarchy**
 ```
-
-### Button Tones
-```typescript
-uiButtonTones // ["solid", "soft", "outline", "ghost", "link"] - all core tones available
-```
-
-### Button Emphasis
-```typescript
-uiButtonEmphases // ["low", "medium", "high"] - all core emphasis levels available
-```
-
-## Architecture
-
-```
-contract-core (semantic authority)
+contract-core (foundation)
    ↓ extends
-contract-button (component contract)
+contract-button (DDD + legacy)
    ↓ implements
 base-button (logic + composition)
    ↓ styles
@@ -106,13 +151,203 @@ skin-tailwind (CSS implementation)
 provider-react (framework adapter)
 ```
 
-## Design Rules
+## 🎯 **Business Logic Features**
 
-- ✅ **Variant ≠ State**: Visual appearance vs. behavioral state
-- ✅ **State ≠ A11y**: Component state vs. accessibility attributes
-- ✅ **Semantic First**: All values are semantic identifiers, not physical values
-- ✅ **Contract Inheritance**: Extends core contracts with component-specific restrictions
-- ✅ **Type Safety**: All props are strongly typed with semantic validation
+### **Button Entity Capabilities**
+- **State Management**: `idle` → `hovered` → `pressed` → `focused` → `disabled` → `loading`
+- **Click Tracking**: Automatic click count and last interaction timestamp
+- **Accessibility Validation**: Built-in WCAG compliance checking
+- **Icon Management**: Position validation and accessibility requirements
+- **Emphasis Levels**: `low`, `medium`, `high` with semantic meaning
+
+### **Domain Events**
+```typescript
+// Observable button operations
+ButtonCreatedEvent        // Button instantiation
+ButtonClickedEvent        // User interactions
+ButtonStateChangedEvent   // State transitions
+ButtonAccessibilityValidatedEvent // Compliance checks
+```
+
+### **Validation Rules**
+- **Business Rules**: Submit buttons require high emphasis
+- **Accessibility**: Icons require proper labeling
+- **State Transitions**: Invalid state changes prevented
+- **Type Safety**: Button types validated at creation
+
+## 🔧 **Migration Guide**
+
+### **From Legacy to DDD**
+
+```typescript
+// Legacy approach
+const buttonProps: UiButtonProps = {
+  variant: { size: 'md', intent: 'primary' },
+  state: { disabled: false },
+  a11y: { role: 'button' }
+};
+
+// DDD approach
+const button = Button.create({
+  buttonType: 'button',
+  emphasis: ButtonEmphasis.MEDIUM
+});
+
+// Migration helper
+const dddButton = createButtonDDD({
+  buttonType: 'submit',
+  emphasis: 'high',
+  hasIcon: true
+});
+```
+
+### **Gradual Adoption**
+1. **Phase 1**: Use legacy APIs (no changes required)
+2. **Phase 2**: Gradually adopt DDD APIs for new features
+3. **Phase 3**: Migrate existing code using helper functions
+4. **Phase 4**: Full DDD adoption (optional)
+
+## 📊 **Quality Metrics**
+
+| Metric | Legacy Architecture | DDD Architecture | Improvement |
+|--------|-------------------|------------------|-------------|
+| **Business Logic** | Scattered | Centralized in Button entity | ✅ **Enterprise-grade** |
+| **Type Safety** | Basic TypeScript | Rich domain types | ✅ **Compile-time guarantees** |
+| **Testability** | Hard to isolate | DI-enabled testing | ✅ **Comprehensive coverage** |
+| **Maintainability** | Functional approach | Domain entities | ✅ **Long-term sustainability** |
+| **Accessibility** | Manual checking | Automated WCAG validation | ✅ **Compliance assurance** |
+| **State Management** | External | Encapsulated in entity | ✅ **Data integrity** |
+
+## 🎨 **Standard Button Configurations**
+
+### **DDD Factory Methods**
+```typescript
+import { createStandardSubmitButton, createStandardCancelButton } from '@damarkuncoro/agnostic-ui-contract-button';
+
+// Pre-configured button inputs
+const submitInput = createStandardSubmitButton({ hasIcon: true });
+const cancelInput = createStandardCancelButton();
+
+// Use with use case
+const submitButton = await getCreateButtonUseCase().execute(submitInput);
+```
+
+### **Legacy Standard Configurations**
+```typescript
+import { getStandardButtonConfigs } from '@damarkuncoro/agnostic-ui-contract-button';
+
+const configs = getStandardButtonConfigs();
+// { submit: { buttonType: 'submit', emphasis: 'high' }, ... }
+```
+
+## 🔒 **SOLID Principles Implementation**
+
+- ✅ **Single Responsibility**: Each class has one clear purpose
+- ✅ **Open/Closed**: New validators extend without modifying existing code
+- ✅ **Liskov Substitution**: All validators implement `IButtonValidator`
+- ✅ **Interface Segregation**: Specific interfaces for button validation
+- ✅ **Dependency Inversion**: Application layer depends on abstractions
+
+## 🧪 **Testing Examples**
+
+### **Unit Testing Domain Logic**
+```typescript
+describe('Button Entity', () => {
+  it('should prevent clicking disabled button', () => {
+    const button = Button.create({ buttonType: 'button' });
+    button.changeState(ButtonState.DISABLED);
+
+    expect(() => button.click()).toThrow('Cannot click a disabled button');
+  });
+
+  it('should validate accessibility requirements', () => {
+    const button = Button.create({
+      buttonType: 'button',
+      hasIcon: true
+    });
+
+    const result = button.validateAccessibility();
+    expect(result.isAccessible).toBe(false);
+    expect(result.violations).toContain('Buttons with icons must be accessible');
+  });
+});
+```
+
+### **Integration Testing Use Cases**
+```typescript
+describe('CreateButtonUseCase', () => {
+  it('should create valid button with accessibility validation', async () => {
+    const useCase = new CreateButtonUseCase([new ButtonAccessibilityValidator()]);
+
+    const result = await useCase.execute({
+      buttonType: 'submit',
+      emphasis: ButtonEmphasis.HIGH
+    });
+
+    expect(result.isValid).toBe(true);
+    expect(result.button.buttonType.value).toBe('submit');
+  });
+});
+```
+
+## 📚 **API Reference**
+
+### **DDD APIs**
+- `Button` - Domain entity with business logic
+- `ButtonType` - Value object for button types
+- `CreateButtonUseCase` - Application service for button creation
+- `ButtonAccessibilityValidator` - WCAG compliance validator
+- `getCreateButtonUseCase()` - Dependency injection accessor
+
+### **Legacy APIs** (Maintained)
+- `UiButtonProps` - Legacy props interface
+- `UiButtonVariant` - Legacy variant interface
+- `UiButtonState` - Legacy state interface
+- `UiButtonA11y` - Legacy accessibility interface
+- `uiButtonSizes`, `uiButtonIntents`, etc. - Semantic arrays
+
+## 🚀 **Performance & Bundle Size**
+
+- **Tree Shaking**: Only import what you need
+- **Lazy Loading**: Domain logic loaded on demand
+- **Minimal Dependencies**: Zero runtime dependencies
+- **Type-Only Imports**: No runtime overhead for types
+
+## 🔄 **Version Compatibility**
+
+- **v2.x**: DDD architecture (current)
+- **v1.x**: Legacy contracts (maintained)
+- **Migration Path**: Seamless upgrade with helper functions
+
+## 🤝 **Contributing**
+
+1. **DDD First**: New features implemented using DDD patterns
+2. **Backward Compatible**: Legacy APIs preserved
+3. **Test Coverage**: Domain logic fully tested
+4. **Accessibility**: WCAG compliance maintained
+
+## 📄 **License**
+
+MIT License - see LICENSE file for details.
+
+---
+
+## 🎯 **DDD Transformation Complete**
+
+**Contract-Button Package**: ✅ **Enterprise-grade DDD architecture with full legacy compatibility**
+
+- ✅ **Domain Entity**: Rich Button entity with encapsulated business logic
+- ✅ **Value Objects**: Immutable ButtonType with validation
+- ✅ **Use Cases**: CreateButtonUseCase with orchestration
+- ✅ **Infrastructure**: AccessibilityValidator with WCAG compliance
+- ✅ **Clean Architecture**: Proper layer separation
+- ✅ **Legacy Compatibility**: All existing APIs preserved
+- ✅ **Migration Helpers**: Gradual adoption path
+- ✅ **SOLID Principles**: All five principles implemented
+- ✅ **Type Safety**: Full TypeScript with domain validation
+- ✅ **Testability**: Dependency injection enabled
+
+**🏛️ Enterprise-grade button contract with DDD excellence! 🚀✨**
 
 ## Releasing
 
