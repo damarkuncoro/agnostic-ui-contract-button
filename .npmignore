@@ -1,0 +1,46 @@
+# Source files (TypeScript)
+src/
+
+# TypeScript config
+tsconfig.json
+
+# Development files
+.gitignore
+*.log
+*.tgz
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+
+# Test files (if any)
+**/*.test.*
+**/*.spec.*
+
+# Documentation drafts
+*.md~
+
+# Development dependencies and lock files
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Build artifacts (keep lib/ for npm package)
+# Uncomment to exclude built files from npm package
+# lib/
+
+# CI/CD files
+.github/
+
+# Development scripts
+scripts/
+
+# Coverage reports
+coverage/
+
+# DDD Development documentation
+# Uncomment to exclude DDD docs from npm package
+# docs/
