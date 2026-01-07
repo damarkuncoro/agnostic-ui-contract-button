@@ -121,9 +121,11 @@ contract-button/
 
 ### **Contract Hierarchy**
 ```
-contract-core (foundation)
+@damarkuncoro/agnostic-ui-contract-core (foundation)
    ↓ extends
-contract-button (DDD + legacy)
+@damarkuncoro/agnostic-ui-contract-box (container contracts)
+   ↓ extends
+@damarkuncoro/agnostic-ui-contract-button (DDD button contracts)
    ↓ implements
 base-button (logic + composition)
    ↓ styles
