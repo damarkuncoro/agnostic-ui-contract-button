@@ -1,4 +1,5 @@
-import type { UiDisabledState, UiLoadingState } from "@damarkuncoro/agnostic-ui-contract-core";
-export interface UiButtonState extends UiDisabledState, UiLoadingState {
+export interface UiButtonState {
+    disabled?: boolean;
+    loading?: boolean;
 }
 //# sourceMappingURL=state.d.ts.map

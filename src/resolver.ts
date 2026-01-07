@@ -2,8 +2,10 @@
 
 import { UI_BUTTON_DEFAULT_VARIANT } from "./constants"
 import type { UiButtonProps } from "./props"
-import { resolveTheme } from "@damarkuncoro/agnostic-ui-contract-core"
-import type { UiTheme } from "@damarkuncoro/agnostic-ui-contract-core"
+// Note: Theme resolution functions are commented out as they depend on
+// legacy contract-core types that have been refactored to DDD architecture
+// import { resolveTheme } from "@damarkuncoro/agnostic-ui-contract-core"
+// import type { UiTheme } from "@damarkuncoro/agnostic-ui-contract-core"
 
 export function resolveButtonProps(
   props: UiButtonProps
@@ -33,7 +35,9 @@ export function resolveButtonProps(
 /**
  * Example: Resolve button theme with responsive tokens
  * Shows how contract-button would use the resolver system
+ * NOTE: Commented out due to DDD refactoring - theme resolution moved to domain layer
  */
+/*
 export function resolveButtonTheme(
   baseTheme: UiTheme,
   options: {
@@ -64,11 +68,14 @@ export function resolveButtonTheme(
   // Resolve the theme using the resolver pipeline
   return resolveTheme(buttonTheme, options)
 }
+*/
 
 /**
  * Example: Get resolved button styles for current breakpoint
  * Shows runtime usage in component implementation
+ * NOTE: Commented out due to DDD refactoring - style resolution moved to domain layer
  */
+/*
 export function getResolvedButtonStyles(
   theme: UiTheme,
   variant: string,
@@ -91,3 +98,4 @@ export function getResolvedButtonStyles(
     gap: buttonTokens?.gap
   }
 }
+*/

@@ -1,1 +1,1 @@
-{"version":3,"file":"state.d.ts","sourceRoot":"","sources":["../src/state.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EACV,eAAe,EACf,cAAc,EACf,MAAM,yCAAyC,CAAA;AAEhD,MAAM,WAAW,aACf,SAAQ,eAAe,EACrB,cAAc;CAAG"}
+{"version":3,"file":"state.d.ts","sourceRoot":"","sources":["../src/state.ts"],"names":[],"mappings":"AAEA,MAAM,WAAW,aAAa;IAC5B,QAAQ,CAAC,EAAE,OAAO,CAAC;IACnB,OAAO,CAAC,EAAE,OAAO,CAAC;CACnB"}
