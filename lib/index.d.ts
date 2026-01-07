@@ -9,13 +9,10 @@ export type { ButtonDomainEvent, ButtonCreatedEvent, ButtonClickedEvent, ButtonS
 export { getCreateButtonUseCase, getButtonAccessibilityValidator, getButtonValidators, getButtonService } from './bootstrap';
 export type { UiVariantSize, UiVariantIntent, UiVariantTone, UiVariantEmphasis, UiA11yRole, UiA11yKeyboardAction } from "@damarkuncoro/agnostic-ui-contract-box";
 export { uiSizes as uiButtonSizes, uiIntents as uiButtonIntents, uiTones as uiButtonTones, uiEmphases as uiButtonEmphases, uiA11yRoles, uiA11yKeyboardActions } from "@damarkuncoro/agnostic-ui-contract-box";
-export type { UiButtonVariant, UiButtonVariantExtended, UiButtonType, UiButtonIconVariant } from "./variant";
-export type { UiVariantSize as UiButtonSize, UiVariantIntent as UiButtonIntent, UiVariantTone as UiButtonTone } from "@damarkuncoro/agnostic-ui-contract-box";
 export type UiButtonEmphasis = "low" | "medium" | "high";
-export { uiButtonTypes } from "./variant";
-export type { UiButtonProps } from "./props";
-export type { UiButtonState } from "./state";
-export type { UiButtonA11y } from "./a11y";
+export type UiButtonSize = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantSize;
+export type UiButtonIntent = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantIntent;
+export type UiButtonTone = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantTone;
 import { Button } from './domain/button/entities/Button';
 import type { CreateButtonInput } from './application/use-cases/CreateButtonUseCase';
 /**

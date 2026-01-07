@@ -67,32 +67,13 @@ export {
   uiA11yKeyboardActions
 } from "@damarkuncoro/agnostic-ui-contract-box"
 
-// Re-export button-specific types and arrays
-export type {
-  UiButtonVariant,
-  UiButtonVariantExtended,
-  UiButtonType,
-  UiButtonIconVariant
-} from "./variant"
-
-// Re-export button size/intent/tone types from box
-export type {
-  UiVariantSize as UiButtonSize,
-  UiVariantIntent as UiButtonIntent,
-  UiVariantTone as UiButtonTone
-} from "@damarkuncoro/agnostic-ui-contract-box"
-
-// Button-specific emphasis
+// Button-specific emphasis (DDD-based)
 export type UiButtonEmphasis = "low" | "medium" | "high"
 
-export {
-  uiButtonTypes
-} from "./variant"
-
-// Re-export button-specific contracts
-export type { UiButtonProps } from "./props"
-export type { UiButtonState } from "./state"
-export type { UiButtonA11y } from "./a11y"
+// Legacy type aliases for backward compatibility (deprecated)
+export type UiButtonSize = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantSize
+export type UiButtonIntent = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantIntent
+export type UiButtonTone = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantTone
 
 // =================================================================
 // MIGRATION HELPERS
