@@ -1,1 +1,0 @@
-{"version":3,"file":"a11y.d.ts","sourceRoot":"","sources":["../src/a11y.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAAE,SAAS,EAAE,MAAM,wCAAwC,CAAA;AAGvE,MAAM,WAAW,YAAa,SAAQ,SAAS;IAE7C,IAAI,CAAC,EAAE,QAAQ,CAAC;IAGhB,WAAW,CAAC,EAAE,OAAO,CAAC;IACtB,YAAY,CAAC,EAAE,OAAO,CAAC;CACxB"}
