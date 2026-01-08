@@ -2,305 +2,274 @@
 
 ## 🏛️ **Domain-Driven Design (DDD) Button Component Contract**
 
-Enterprise-grade button component contract implementing **Domain-Driven Design (DDD)** principles with comprehensive business logic, accessibility compliance, and state management. Built on top of the contract-core foundation with full backward compatibility.
-
-## ✨ **Key Features**
-
-### **🏛️ DDD Architecture**
-- ✅ **Domain Layer**: `Button` entity with rich business logic and state management
-- ✅ **Application Layer**: `CreateButtonUseCase` with orchestration and validation
-- ✅ **Infrastructure Layer**: `ButtonAccessibilityValidator` with WCAG compliance
-- ✅ **Clean Architecture**: Proper separation with dependency injection
-
-### **🔒 Business Logic Protection**
-- ✅ **Button Entity**: Comprehensive button lifecycle with state transitions
-- ✅ **ButtonType Value Object**: Immutable button types with semantic validation
-- ✅ **Accessibility Validation**: WCAG 2.1 AA compliance with automated checking
-- ✅ **Domain Events**: Observable button operations (`ButtonCreatedEvent`, `ButtonClickedEvent`)
-
-### **🎯 DDD-Only Architecture**
-- ✅ **Pure Domain-Driven Design**: Enterprise-grade DDD implementation
-- ✅ **Clean Architecture**: No legacy code dependencies
-- ✅ **Future-Proof**: Modern patterns for long-term maintainability
-
-### **♿ Accessibility First**
-- ✅ **WCAG 2.1 AA**: Full compliance with automated validation
-- ✅ **Keyboard Navigation**: Proper focus management and keyboard support
-- ✅ **Screen Reader**: ARIA roles and semantic markup validation
-- ✅ **Color Contrast**: Automated contrast ratio validation
-
-## 📦 **Installation**
-
-```bash
-npm install @damarkuncoro/agnostic-ui-contract-button
-```
-
-## 🚀 **DDD Architecture Usage**
-
-### **Modern DDD APIs (Recommended)**
-
-```typescript
-import {
-  Button,
-  ButtonState,
-  ButtonEmphasis,
-  ButtonType,
-  CreateButtonUseCase,
-  getCreateButtonUseCase,
-  createButtonDDD,
-  validateButtonDDD
-} from '@damarkuncoro/agnostic-ui-contract-button';
-
-// Create button using DDD use case
-const useCase = getCreateButtonUseCase();
-const result = await useCase.execute({
-  buttonType: 'submit',
-  emphasis: ButtonEmphasis.HIGH,
-  hasIcon: true,
-  iconPosition: 'start'
-});
-
-const button = result.button;
-
-// Business logic operations
-button.click('primary');
-button.changeState(ButtonState.LOADING);
-
-// Domain events
-const events = button.getDomainEvents();
-console.log('Button events:', events);
-
-// Accessibility validation
-const accessibilityResult = button.validateAccessibility();
-if (!accessibilityResult.isAccessible) {
-  console.log('Violations:', accessibilityResult.violations);
-}
-```
-
-### **Type Aliases for Compatibility**
-
-```typescript
-import {
-  // Type aliases from contract-box
-  UiButtonSize,
-  UiButtonIntent,
-  UiButtonTone,
-  UiButtonEmphasis
-} from '@damarkuncoro/agnostic-ui-contract-button';
-
-// These are type aliases for backward compatibility
-// Prefer using the DDD Button entity directly
-```
+**This is a DDD contract package for button components.** This package extends the contract-core foundation with button-specific business logic, accessibility compliance, and state management using proper Domain-Driven Design principles.
 
 ## 🏗️ **Architecture Overview**
 
-### **DDD Layer Structure**
-```
-contract-button/
-├── domain/                    # Domain Layer
-│   ├── button/
-│   │   ├── entities/
-│   │   │   └── Button.ts     # Button entity with business logic
-│   │   └── services/
-│   │       └── IButtonValidator.ts
-│   └── shared/
-│       ├── BaseEntity.ts     # Shared kernel
-│       ├── ValueObject.ts
-│       ├── events/
-│       │   └── DomainEvent.ts
-│       └── value-objects/
-│           └── ButtonType.ts # ButtonType VO
-├── application/               # Application Layer
-│   └── use-cases/
-│       └── CreateButtonUseCase.ts
-├── infrastructure/            # Infrastructure Layer
-│   └── validators/
-│       └── ButtonAccessibilityValidator.ts
-└── bootstrap.ts              # Dependency Injection
-```
-
-### **Contract Hierarchy**
 ```
 @damarkuncoro/agnostic-ui-contract-core (foundation)
-   ↓ extends
+    ↓ extends
 @damarkuncoro/agnostic-ui-contract-box (container contracts)
-   ↓ extends
+    ↓ extends
 @damarkuncoro/agnostic-ui-contract-button (DDD button contracts)
-   ↓ implements
-base-button (logic + composition)
-   ↓ styles
-skin-tailwind (CSS implementation)
-   ↓ renders
-provider-react (framework adapter)
 ```
 
-## 🎯 **Business Logic Features**
+## 📦 **DDD Architecture Structure**
 
-### **Button Entity Capabilities**
-- **State Management**: `idle` → `hovered` → `pressed` → `focused` → `disabled` → `loading`
-- **Click Tracking**: Automatic click count and last interaction timestamp
-- **Accessibility Validation**: Built-in WCAG compliance checking
-- **Icon Management**: Position validation and accessibility requirements
-- **Emphasis Levels**: `low`, `medium`, `high` with semantic meaning
+```
+contract-packages/agnostic-ui-contract-button/
+├── src/
+│   ├── index.ts                          # Main exports
+│   ├── bootstrap.ts                      # Dependency Injection
+│   ├── domain/
+│   │   ├── contract/
+│   │   │   ├── entities/
+│   │   │   │   └── ButtonContract.ts     # Button entity with business logic
+│   │   │   ├── services/
+│   │   │   │   └── IButtonContractFactory.ts
+│   │   │   └── value-objects/
+│   │   │       └── ButtonVariant.ts      # ButtonVariant VO
+│   │   └── shared/
+│   │       ├── BaseEntity.ts             # Re-export from core
+│   │       ├── ValueObject.ts            # Re-export from core
+│   │       └── events/
+│   │           └── ButtonEvents.ts       # Domain events
+│   ├── application/
+│   │   └── use-cases/
+│   │       └── CreateButtonContractUseCase.ts
+│   └── infrastructure/
+│       └── factories/
+│           └── ButtonContractFactory.ts
+└── package.json
+```
+
+## 🏛️ **DDD Layer Responsibilities**
+
+### **Domain Layer - Why It Matters:**
+The domain layer contains the core business logic and rules. Entities represent business concepts with identity and behavior, while Value Objects represent immutable descriptive aspects. This separation ensures business rules are preserved and testable independently of infrastructure concerns.
+
+- **Entities**: `ButtonContract` - Represents a button component contract with identity and behavior
+- **Value Objects**: `ButtonVariant` - Immutable descriptive aspects of button variants
+- **Domain Services**: `IButtonContractFactory` - Business logic coordination
+
+### **Application Layer - Why It Matters:**
+Use Cases orchestrate complex business operations and coordinate between domain objects. They encapsulate application-specific logic while keeping the domain layer pure and focused on business rules.
+
+- **Use Cases**: `CreateButtonContractUseCase` - Orchestrates button contract creation
+
+### **Infrastructure Layer - Why It Matters:**
+Infrastructure concerns (persistence, external services, frameworks) are isolated here through interfaces and adapters. This allows the domain and application layers to remain independent and testable.
+
+- **Factories**: `ButtonContractFactory` - Infrastructure implementations
+
+## 🚀 **Installation**
+
+```bash
+npm install @damarkuncoro/agnostic-ui-contract-button
+# or
+pnpm add @damarkuncoro/agnostic-ui-contract-button
+```
+
+## 🏛️ **DDD Architecture Usage**
+
+### **Creating a Button Contract**
+
+```typescript
+import { 
+  ButtonContract, 
+  ButtonVariant,
+  CreateButtonContractUseCase,
+  getCreateButtonContractUseCase 
+} from '@damarkuncoro/agnostic-ui-contract-button';
+
+// Using the entity directly
+const contract = ButtonContract.create({
+  name: 'my-button',
+  variants: [
+    ButtonVariant.createSizeVariant(),
+    ButtonVariant.createIntentVariant()
+  ],
+  props: [
+    { name: 'disabled', type: 'boolean', required: false, default: false }
+  ],
+  accessibility: {
+    role: 'button',
+    keyboard: ['Enter', 'Space'],
+    focusable: true
+  }
+});
+
+// Using the use case
+const useCase = getCreateButtonContractUseCase();
+const result = await useCase.execute({
+  name: 'primary-button',
+  variants: [
+    { type: 'size', values: ['sm', 'md', 'lg'] },
+    { type: 'intent', values: ['primary', 'secondary'] }
+  ]
+});
+
+console.log('Contract created:', result.contract?.name);
+console.log('Accessible:', result.accessibility.isAccessible);
+```
+
+### **Using Button Variants**
+
+```typescript
+import { ButtonVariant } from '@damarkuncoro/agnostic-ui-contract-button';
+
+// Create standard variants
+const sizeVariant = ButtonVariant.createSizeVariant();
+console.log(sizeVariant.values); // ['xs', 'sm', 'md', 'lg', 'xl']
+
+const intentVariant = ButtonVariant.createIntentVariant();
+console.log(intentVariant.values); // ['primary', 'secondary', 'success', ...]
+
+// Custom variants
+const customVariant = ButtonVariant.create('custom', ['option1', 'option2']);
+```
 
 ### **Domain Events**
+
 ```typescript
-// Observable button operations
-ButtonCreatedEvent        // Button instantiation
-ButtonClickedEvent        // User interactions
-ButtonStateChangedEvent   // State transitions
-ButtonAccessibilityValidatedEvent // Compliance checks
-```
+import { 
+  ButtonContractCreatedEvent,
+  ButtonAccessibilityValidatedEvent 
+} from '@damarkuncoro/agnostic-ui-contract-button';
 
-### **Validation Rules**
-- **Business Rules**: Submit buttons require high emphasis
-- **Accessibility**: Icons require proper labeling
-- **State Transitions**: Invalid state changes prevented
-- **Type Safety**: Button types validated at creation
+// Listen for domain events
+const contract = ButtonContract.create({ name: 'my-button' });
+const events = contract.getDomainEvents();
 
-## 🎯 **Usage Patterns**
-
-### **Direct DDD Entity Usage**
-```typescript
-// Create and use Button entity directly
-const button = Button.create({
-  buttonType: 'submit',
-  emphasis: ButtonEmphasis.HIGH,
-  hasIcon: true
+events.forEach(event => {
+  if (event instanceof ButtonContractCreatedEvent) {
+    console.log('Contract created:', event.contractName);
+  }
 });
-
-// Business operations
-button.click('primary');
-const isAccessible = button.validateAccessibility().isAccessible;
 ```
 
-### **Use Case Orchestration**
+## 🏢 **Application Layer Usage**
+
+### **CreateButtonContractUseCase**
+
 ```typescript
-// Use application services for complex operations
-const useCase = getCreateButtonUseCase();
+import { CreateButtonContractUseCase } from '@damarkuncoro/agnostic-ui-contract-button';
+import { ButtonContractFactory } from '@damarkuncoro/agnostic-ui-contract-button';
+
+const factory = new ButtonContractFactory();
+const useCase = new CreateButtonContractUseCase(factory);
+
 const result = await useCase.execute({
-  buttonType: 'submit',
-  emphasis: ButtonEmphasis.HIGH
+  name: 'submit-button',
+  variants: [
+    { type: 'size', values: ['sm', 'md', 'lg'] },
+    { type: 'intent', values: ['primary'] }
+  ],
+  props: [
+    { name: 'disabled', type: 'boolean', default: false }
+  ]
+});
+
+if (result.success) {
+  console.log('Button contract created!');
+} else {
+  console.error('Failed:', result.message);
+}
+```
+
+## 🛠️ **Infrastructure Layer**
+
+### **ButtonContractFactory**
+
+```typescript
+import { ButtonContractFactory } from '@damarkuncoro/agnostic-ui-contract-button';
+
+const factory = new ButtonContractFactory();
+
+// Create standard button contract
+const standardContract = factory.createStandardButtonContract('standard-button');
+
+// Create custom button contract
+const customContract = factory.createContract({
+  name: 'custom-button',
+  variants: [
+    { type: 'size', values: ['sm', 'md', 'lg'] }
+  ]
 });
 ```
 
-## 📊 **Quality Metrics**
+## 📚 **Architecture Benefits**
 
-| Metric | Legacy Architecture | DDD Architecture | Improvement |
-|--------|-------------------|------------------|-------------|
-| **Business Logic** | Scattered | Centralized in Button entity | ✅ **Enterprise-grade** |
-| **Type Safety** | Basic TypeScript | Rich domain types | ✅ **Compile-time guarantees** |
-| **Testability** | Hard to isolate | DI-enabled testing | ✅ **Comprehensive coverage** |
-| **Maintainability** | Functional approach | Domain entities | ✅ **Long-term sustainability** |
-| **Accessibility** | Manual checking | Automated WCAG validation | ✅ **Compliance assurance** |
-| **State Management** | External | Encapsulated in entity | ✅ **Data integrity** |
+| Aspect | Benefit |
+|--------|---------|
+| **SOLID Principles** | Single responsibility, dependency injection, interface segregation |
+| **Testability** | Dependency injection enables comprehensive unit testing |
+| **Maintainability** | Organized code structure that's easy to extend |
+| **Domain Integrity** | Business rules properly encapsulated and validated |
+| **Loose Coupling** | Event-driven architecture with proper domain modeling |
 
-## 🎨 **Standard Button Configurations**
+## 🎯 **Best Practices**
 
-### **DDD Factory Methods**
+### **1. Use Domain Entities for Business Logic**
 ```typescript
-import { createStandardSubmitButton, createStandardCancelButton } from '@damarkuncoro/agnostic-ui-contract-button';
-
-// Pre-configured button inputs
-const submitInput = createStandardSubmitButton({ hasIcon: true });
-const cancelInput = createStandardCancelButton();
-
-// Use with use case
-const submitButton = await getCreateButtonUseCase().execute(submitInput);
-```
-
-### **Legacy Standard Configurations**
-```typescript
-import { getStandardButtonConfigs } from '@damarkuncoro/agnostic-ui-contract-button';
-
-const configs = getStandardButtonConfigs();
-// { submit: { buttonType: 'submit', emphasis: 'high' }, ... }
-```
-
-## 🔒 **SOLID Principles Implementation**
-
-- ✅ **Single Responsibility**: Each class has one clear purpose
-- ✅ **Open/Closed**: New validators extend without modifying existing code
-- ✅ **Liskov Substitution**: All validators implement `IButtonValidator`
-- ✅ **Interface Segregation**: Specific interfaces for button validation
-- ✅ **Dependency Inversion**: Application layer depends on abstractions
-
-## 🧪 **Testing Examples**
-
-### **Unit Testing Domain Logic**
-```typescript
-describe('Button Entity', () => {
-  it('should prevent clicking disabled button', () => {
-    const button = Button.create({ buttonType: 'button' });
-    button.changeState(ButtonState.DISABLED);
-
-    expect(() => button.click()).toThrow('Cannot click a disabled button');
-  });
-
-  it('should validate accessibility requirements', () => {
-    const button = Button.create({
-      buttonType: 'button',
-      hasIcon: true
-    });
-
-    const result = button.validateAccessibility();
-    expect(result.isAccessible).toBe(false);
-    expect(result.violations).toContain('Buttons with icons must be accessible');
-  });
+// ✅ Good: Use domain entities with proper validation
+const contract = ButtonContract.create({
+  name: 'my-button',
+  variants: [ButtonVariant.createSizeVariant()]
 });
 ```
 
-### **Integration Testing Use Cases**
+### **2. Use Value Objects for Immutable Data**
 ```typescript
-describe('CreateButtonUseCase', () => {
-  it('should create valid button with accessibility validation', async () => {
-    const useCase = new CreateButtonUseCase([new ButtonAccessibilityValidator()]);
-
-    const result = await useCase.execute({
-      buttonType: 'submit',
-      emphasis: ButtonEmphasis.HIGH
-    });
-
-    expect(result.isValid).toBe(true);
-    expect(result.button.buttonType.value).toBe('submit');
-  });
-});
+// ✅ Good: Use value objects for validated data
+const variant = ButtonVariant.create('size', ['sm', 'md', 'lg']);
 ```
 
-## 📚 **API Reference**
+### **3. Use Use Cases for Complex Operations**
+```typescript
+// ✅ Good: Use use cases for orchestration
+const useCase = getCreateButtonContractUseCase();
+const result = await useCase.execute(request);
+```
 
-### **DDD APIs**
-- `Button` - Domain entity with business logic
-- `ButtonType` - Value object for button types
-- `CreateButtonUseCase` - Application service for button creation
-- `ButtonAccessibilityValidator` - WCAG compliance validator
-- `getCreateButtonUseCase()` - Dependency injection accessor
+### **4. Use Dependency Injection**
+```typescript
+// ✅ Good: Use DI for testability
+const factory = new ButtonContractFactory();
+const useCase = new CreateButtonContractUseCase(factory);
+```
 
-### **Type Aliases**
-- `UiButtonSize` - Type alias for button sizes
-- `UiButtonIntent` - Type alias for button intents
-- `UiButtonTone` - Type alias for button tones
-- `UiButtonEmphasis` - Button emphasis levels
+## 🔄 **Migration from Legacy**
 
-## 🚀 **Performance & Bundle Size**
+### **Legacy Approach (Deprecated)**
+```typescript
+// ❌ Avoid: Legacy functional approach
+import { createContract } from '@damarkuncoro/agnostic-ui-contract-button';
+const contract = createContract({ name: 'button', ... });
+```
 
-- **Tree Shaking**: Only import what you need
-- **Lazy Loading**: Domain logic loaded on demand
-- **Minimal Dependencies**: Zero runtime dependencies
-- **Type-Only Imports**: No runtime overhead for types
+### **DDD Approach (Recommended)**
+```typescript
+// ✅ Good: DDD approach with proper domain modeling
+import { ButtonContract } from '@damarkuncoro/agnostic-ui-contract-button';
+const contract = ButtonContract.create({ name: 'button', ... });
+```
 
-## 🔄 **Version Compatibility**
+## 📦 **Related Packages**
 
-- **v2.x**: Pure DDD architecture (current)
-- **Breaking Change**: Legacy APIs removed for clean DDD implementation
-- **Future Versions**: DDD-first development approach
+- **@damarkuncoro/agnostic-ui-contract-core**: Core DDD foundation
+- **@damarkuncoro/agnostic-ui-contract-box**: Box component contracts
+- **@damarkuncoro/agnostic-ui-base-button**: Base button implementation
 
 ## 🤝 **Contributing**
 
-1. **DDD First**: New features implemented using DDD patterns
-2. **Backward Compatible**: Legacy APIs preserved
-3. **Test Coverage**: Domain logic fully tested
-4. **Accessibility**: WCAG compliance maintained
+When adding new button contract features:
+
+1. **Domain Layer**: Place business logic in appropriate domain entities/services
+2. **Value Objects**: Use immutable value objects for data validation
+3. **Dependency Injection**: Register services in bootstrap container
+4. **Domain Events**: Publish events for important business state changes
+5. **Testing**: Write unit tests for domain logic, integration tests for use cases
 
 ## 📄 **License**
 
@@ -308,71 +277,4 @@ MIT License - see LICENSE file for details.
 
 ---
 
-## 🎯 **DDD Transformation Complete**
-
-**Contract-Button Package**: ✅ **Pure Enterprise-grade DDD Architecture**
-
-- ✅ **Domain Entity**: Rich Button entity with encapsulated business logic
-- ✅ **Value Objects**: Immutable ButtonType with validation
-- ✅ **Use Cases**: CreateButtonUseCase with orchestration
-- ✅ **Infrastructure**: AccessibilityValidator with WCAG compliance
-- ✅ **Clean Architecture**: Proper layer separation
-- ✅ **DDD-Only**: No legacy code dependencies
-- ✅ **SOLID Principles**: All five principles implemented
-- ✅ **Type Safety**: Full TypeScript with domain validation
-- ✅ **Testability**: Dependency injection enabled
-- ✅ **Future-Proof**: Modern patterns for long-term maintainability
-
-**🏛️ Pure DDD button contract with enterprise excellence! 🚀✨**
-
-## Releasing
-
-To release a new version:
-
-1. Update the version in `package.json`
-2. Commit the changes
-3. Create and push a git tag: `git tag v1.0.1 && git push origin v1.0.1`
-
-The GitHub Actions workflow will automatically:
-- Build the package
-- Publish to npm
-- Create a GitHub release with the built tarball
-
-### Prerequisites
-
-- `NPM_TOKEN` secret must be configured in GitHub repository settings
-- The token should have publish permissions for the `@damarkuncoro` scope
-
-### Steps
-
-1. **Create a Release Branch**:
-   ```bash
-   git checkout -b release/v1.0.1
-   ```
-
-2. **Update Version**:
-   Edit `package.json` to set the new version (e.g., `"version": "1.0.1"`).
-
-3. **Commit Changes**:
-   ```bash
-   git add package.json
-   git commit -m "Release v1.0.1"
-   ```
-
-4. **Push to Remote**:
-   ```bash
-   git push origin release/v1.0.1
-   ```
-
-5. **Create a Pull Request**:
-   Open a PR from `release/v1.0.1` to `main` and get it approved.
-
-6. **Merge and Tag**:
-   Once merged, create a git tag for the release:
-   ```bash
-   git tag v1.0.1
-   git push origin v1.0.1
-   ```
-
-7. **Monitor Workflow**:
-   The GitHub Actions workflow will automatically build, publish, and create a release.
+**🏛️ DDD Button Contract Package** - Enterprise-grade Domain-Driven Design for button components.

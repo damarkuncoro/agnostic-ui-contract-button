@@ -3,39 +3,45 @@
 /**
  * Contract-Button Application Bootstrap
  * Sets up dependency injection container for button operations using DDD principles
+ * 
+ * Infrastructure Layer - Why It Matters:
+ * Infrastructure concerns (persistence, external services, frameworks) are
+ * isolated here through interfaces and adapters. This allows the domain and
+ * application layers to remain independent and testable.
  */
 
-import { CreateButtonUseCase } from './application/use-cases/CreateButtonUseCase';
-import { ButtonAccessibilityValidator } from './infrastructure/validators/ButtonAccessibilityValidator';
-import { IButtonValidator } from './domain/button/services/IButtonValidator';
+import { CreateButtonContractUseCase } from './application/use-cases/CreateButtonContractUseCase';
+import { ButtonContractFactory } from './infrastructure/factories/ButtonContractFactory';
+import type { IButtonContractFactory } from './domain/contract/services/IButtonContractFactory';
 
-// Service container for dependency injection
-class ButtonServiceContainer {
-  private static instance: ButtonServiceContainer;
+/**
+ * Button Contract Service Container
+ * Manages the lifecycle of services and their dependencies
+ */
+class ButtonContractServiceContainer {
+  private static instance: ButtonContractServiceContainer;
   private services: Map<string, any> = new Map();
 
   private constructor() {
     this.initializeServices();
   }
 
-  static getInstance(): ButtonServiceContainer {
-    if (!ButtonServiceContainer.instance) {
-      ButtonServiceContainer.instance = new ButtonServiceContainer();
+  static getInstance(): ButtonContractServiceContainer {
+    if (!ButtonContractServiceContainer.instance) {
+      ButtonContractServiceContainer.instance = new ButtonContractServiceContainer();
     }
-    return ButtonServiceContainer.instance;
+    return ButtonContractServiceContainer.instance;
   }
 
   private initializeServices(): void {
-    // Infrastructure - Button Validators
-    const accessibilityValidator = new ButtonAccessibilityValidator();
-    this.services.set('ButtonAccessibilityValidator', accessibilityValidator);
+    // Infrastructure - Factories
+    const factory: IButtonContractFactory = new ButtonContractFactory();
+    this.services.set('IButtonContractFactory', factory);
+    this.services.set('ButtonContractFactory', factory);
 
-    // Button Validators Array
-    const buttonValidators: IButtonValidator[] = [accessibilityValidator];
-    this.services.set('ButtonValidators', buttonValidators);
-
-    // Application Services
-    this.services.set('CreateButtonUseCase', new CreateButtonUseCase(buttonValidators));
+    // Application - Use Cases
+    const createUseCase = new CreateButtonContractUseCase(factory);
+    this.services.set('CreateButtonContractUseCase', createUseCase);
   }
 
   get<T>(serviceName: string): T {
@@ -47,36 +53,28 @@ class ButtonServiceContainer {
   }
 
   // Convenience methods for commonly used services
-  getCreateButtonUseCase(): CreateButtonUseCase {
-    return this.get<CreateButtonUseCase>('CreateButtonUseCase');
+  getCreateButtonContractUseCase(): CreateButtonContractUseCase {
+    return this.get<CreateButtonContractUseCase>('CreateButtonContractUseCase');
   }
 
-  getButtonAccessibilityValidator(): ButtonAccessibilityValidator {
-    return this.get<ButtonAccessibilityValidator>('ButtonAccessibilityValidator');
-  }
-
-  getButtonValidators(): IButtonValidator[] {
-    return this.get<IButtonValidator[]>('ButtonValidators');
+  getButtonContractFactory(): ButtonContractFactory {
+    return this.get<ButtonContractFactory>('ButtonContractFactory');
   }
 }
 
 // Export singleton instance
-export const buttonServiceContainer = ButtonServiceContainer.getInstance();
+export const buttonContractServiceContainer = ButtonContractServiceContainer.getInstance();
 
 // Export convenience functions
-export function getCreateButtonUseCase(): CreateButtonUseCase {
-  return buttonServiceContainer.getCreateButtonUseCase();
+export function getCreateButtonContractUseCase(): CreateButtonContractUseCase {
+  return buttonContractServiceContainer.getCreateButtonContractUseCase();
 }
 
-export function getButtonAccessibilityValidator(): ButtonAccessibilityValidator {
-  return buttonServiceContainer.getButtonAccessibilityValidator();
-}
-
-export function getButtonValidators(): IButtonValidator[] {
-  return buttonServiceContainer.getButtonValidators();
+export function getButtonContractFactory(): ButtonContractFactory {
+  return buttonContractServiceContainer.getButtonContractFactory();
 }
 
 // Export service locator function for generic access
-export function getButtonService<T>(serviceName: string): T {
-  return buttonServiceContainer.get<T>(serviceName);
+export function getButtonContractService<T>(serviceName: string): T {
+  return buttonContractServiceContainer.get<T>(serviceName);
 }

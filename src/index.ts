@@ -1,8 +1,14 @@
 // =================================================================
-// Agnostic UI Contract Button - Domain-Driven Architecture
-//
+// Agnostic UI Contract Button - Domain-Driven Design Architecture
+// =================================================================
+// 
 // This package provides the button component contract with comprehensive
 // business logic, accessibility compliance, and state management using DDD principles.
+// 
+// Architecture Layer:
+// - Domain Layer: Entities, Value Objects, Domain Services
+// - Application Layer: Use Cases for orchestration
+// - Infrastructure Layer: Validators, Repositories
 // =================================================================
 
 // Initialize bootstrap
@@ -12,36 +18,45 @@ import './bootstrap'
 // DDD ARCHITECTURE EXPORTS (New)
 // =================================================================
 
-// Domain Layer
-export { Button, ButtonState, ButtonEmphasis } from './domain/button/entities/Button';
-export { ButtonType } from './domain/shared/value-objects/ButtonType';
+// Domain Layer - Why It Matters:
+// The domain layer contains the core business logic and rules. Entities represent
+// business concepts with identity and behavior, while Value Objects represent
+// immutable descriptive aspects. This separation ensures business rules are
+// preserved and testable independently of infrastructure concerns.
+export { ButtonContract } from './domain/contract/entities/ButtonContract';
+export type { ButtonProp, ButtonAccessibility } from './domain/contract/entities/ButtonContract';
 
-// Application Layer
-export { CreateButtonUseCase } from './application/use-cases/CreateButtonUseCase';
+export { ButtonVariant } from './domain/contract/value-objects/ButtonVariant';
+
+// Application Layer - Why It Matters:
+// Use Cases orchestrate complex business operations and coordinate between
+// domain objects. They encapsulate application-specific logic while keeping
+// the domain layer pure and focused on business rules.
+export { CreateButtonContractUseCase } from './application/use-cases/CreateButtonContractUseCase';
 export type {
-  CreateButtonInput,
-  CreateButtonOutput
-} from './application/use-cases/CreateButtonUseCase';
+  CreateButtonContractRequest,
+  CreateButtonContractResponse
+} from './application/use-cases/CreateButtonContractUseCase';
 
-// Infrastructure Layer
-export { ButtonAccessibilityValidator } from './infrastructure/validators/ButtonAccessibilityValidator';
-export type { IButtonValidator } from './domain/button/services/IButtonValidator';
-
-// Domain Events
+// Domain Events - Why It Matters:
+// Domain Events capture significant business moments and enable loose coupling between
+// bounded contexts. They allow other parts of the system to react to important changes
+// without tight dependencies, supporting eventual consistency and event-driven architecture.
 export type {
   ButtonDomainEvent,
-  ButtonCreatedEvent,
-  ButtonClickedEvent,
+  ButtonContractCreatedEvent,
   ButtonStateChangedEvent,
+  ButtonClickedEvent,
   ButtonAccessibilityValidatedEvent
-} from './domain/shared/events/DomainEvent';
+} from './domain/shared/events/ButtonEvents';
 
-// Dependency Injection
+// Dependency Injection - Why It Matters:
+// Dependency injection enables loose coupling between components, making the system
+// more testable and maintainable. The service container manages the lifecycle of
+// services and their dependencies.
 export {
-  getCreateButtonUseCase,
-  getButtonAccessibilityValidator,
-  getButtonValidators,
-  getButtonService
+  getButtonContractService,
+  getCreateButtonContractUseCase
 } from './bootstrap';
 
 // =================================================================
@@ -79,185 +94,44 @@ export type UiButtonTone = import("@damarkuncoro/agnostic-ui-contract-box").UiVa
 // MIGRATION HELPERS
 // =================================================================
 
-import { Button, ButtonEmphasis } from './domain/button/entities/Button';
-import { ButtonType } from './domain/shared/value-objects/ButtonType';
-import { getCreateButtonUseCase } from './bootstrap';
-import type { CreateButtonInput } from './application/use-cases/CreateButtonUseCase';
+import { ButtonContract } from './domain/contract/entities/ButtonContract';
+import { ButtonVariant } from './domain/contract/value-objects/ButtonVariant';
+import { getCreateButtonContractUseCase } from './bootstrap';
+import type { CreateButtonContractRequest } from './application/use-cases/CreateButtonContractUseCase';
 
 /**
- * Migrates legacy button creation to DDD Button entity
- * @param legacyConfig Legacy button configuration
- * @returns DDD Button entity
+ * Creates a standard button contract using DDD
  */
-export function createButtonDDD(legacyConfig: {
-  buttonType: string;
-  emphasis?: 'low' | 'medium' | 'high';
-  hasIcon?: boolean;
-  iconPosition?: 'start' | 'end';
-  id?: string;
-}): Button {
-  // Map legacy emphasis to new enum
-  const emphasisMap: Record<string, ButtonEmphasis> = {
-    'low': ButtonEmphasis.LOW,
-    'medium': ButtonEmphasis.MEDIUM,
-    'high': ButtonEmphasis.HIGH
-  };
-
-  const emphasis = legacyConfig.emphasis ? emphasisMap[legacyConfig.emphasis] : ButtonEmphasis.MEDIUM;
-
-  return Button.create({
-    id: legacyConfig.id,
-    buttonType: legacyConfig.buttonType,
-    emphasis,
-    hasIcon: legacyConfig.hasIcon,
-    iconPosition: legacyConfig.iconPosition
+export function createStandardButtonContract(name: string): ButtonContract {
+  return ButtonContract.create({
+    name,
+    variants: [
+      ButtonVariant.createSizeVariant(),
+      ButtonVariant.createIntentVariant(),
+      ButtonVariant.createToneVariant(),
+      ButtonVariant.createEmphasisVariant()
+    ],
+    props: [
+      { name: 'disabled', type: 'boolean', required: false, default: false },
+      { name: 'loading', type: 'boolean', required: false, default: false },
+      { name: 'icon', type: 'string', required: false },
+      { name: 'iconPosition', type: 'string', enum: ['start', 'end'], required: false, default: 'start' }
+    ],
+    accessibility: {
+      role: 'button',
+      keyboard: ['Enter', 'Space'],
+      focusable: true,
+      label: true
+    }
   });
 }
 
 /**
- * Migrates legacy button validation to DDD use case
- * @param legacyConfig Legacy button configuration
- * @returns Promise resolving to validation result
+ * Creates a button contract using the use case
  */
-export async function validateButtonDDD(legacyConfig: {
-  buttonType: string;
-  emphasis?: 'low' | 'medium' | 'high';
-  hasIcon?: boolean;
-  iconPosition?: 'start' | 'end';
-  id?: string;
-}): Promise<{ isValid: boolean; errors: string[]; warnings: string[]; button: Button }> {
-  const button = createButtonDDD(legacyConfig);
-  const accessibilityResult = button.validateAccessibility();
-
-  return {
-    isValid: accessibilityResult.isAccessible,
-    errors: accessibilityResult.violations,
-    warnings: [],
-    button
-  };
-}
-
-/**
- * Creates a standard submit button using DDD
- * @param options Additional options
- * @returns CreateButtonInput for standard submit button
- */
-export function createStandardSubmitButton(options: {
-  id?: string;
-  hasIcon?: boolean;
-} = {}): CreateButtonInput {
-  const useCase = getCreateButtonUseCase();
-  return useCase.createStandardSubmitButton(options);
-}
-
-/**
- * Creates a standard cancel button using DDD
- * @param options Additional options
- * @returns CreateButtonInput for standard cancel button
- */
-export function createStandardCancelButton(options: {
-  id?: string;
-  hasIcon?: boolean;
-} = {}): CreateButtonInput {
-  const useCase = getCreateButtonUseCase();
-  return useCase.createStandardCancelButton(options);
-}
-
-/**
- * Creates a standard primary action button using DDD
- * @param options Additional options
- * @returns CreateButtonInput for standard primary button
- */
-export function createStandardPrimaryButton(options: {
-  id?: string;
-  hasIcon?: boolean;
-  iconPosition?: 'start' | 'end';
-} = {}): CreateButtonInput {
-  const useCase = getCreateButtonUseCase();
-  return useCase.createStandardPrimaryButton(options);
-}
-
-/**
- * Creates a standard secondary action button using DDD
- * @param options Additional options
- * @returns CreateButtonInput for standard secondary button
- */
-export function createStandardSecondaryButton(options: {
-  id?: string;
-  hasIcon?: boolean;
-  iconPosition?: 'start' | 'end';
-} = {}): CreateButtonInput {
-  const useCase = getCreateButtonUseCase();
-  return useCase.createStandardSecondaryButton(options);
-}
-
-/**
- * Converts DDD Button entity back to legacy format
- * @param button DDD Button entity
- * @returns Legacy button format
- */
-export function convertButtonToLegacy(button: Button): {
-  buttonType: string;
-  emphasis: string;
-  hasIcon: boolean;
-  iconPosition: 'start' | 'end';
-  state: string;
-  isAccessible: boolean;
-  clickCount: number;
-} {
-  // Map new emphasis enum to legacy string
-  const emphasisMap: Record<ButtonEmphasis, string> = {
-    [ButtonEmphasis.LOW]: 'low',
-    [ButtonEmphasis.MEDIUM]: 'medium',
-    [ButtonEmphasis.HIGH]: 'high'
-  };
-
-  // Map new state enum to legacy string
-  const stateMap: Record<string, string> = {
-    'idle': 'idle',
-    'hovered': 'hovered',
-    'pressed': 'pressed',
-    'focused': 'focused',
-    'disabled': 'disabled',
-    'loading': 'loading'
-  };
-
-  return {
-    buttonType: button.buttonType.value,
-    emphasis: emphasisMap[button.emphasis],
-    hasIcon: button.hasIcon,
-    iconPosition: button.iconPosition,
-    state: stateMap[button.state],
-    isAccessible: button.isAccessible,
-    clickCount: button.clickCount
-  };
-}
-
-/**
- * Checks if a button configuration is valid using DDD validation
- * @param config Button configuration
- * @returns Validation result
- */
-export function isValidButtonConfiguration(config: any): boolean {
-  try {
-    const button = createButtonDDD(config);
-    const accessibilityResult = button.validateAccessibility();
-    return accessibilityResult.isAccessible;
-  } catch (error) {
-    return false;
-  }
-}
-
-// =================================================================
-// LEGACY UTILITY FUNCTIONS (Deprecated)
-// =================================================================
-
-// Quick access to standard button configurations (deprecated - use DDD services)
-export function getStandardButtonConfigs() {
-  return {
-    submit: { buttonType: 'submit', emphasis: 'high' },
-    cancel: { buttonType: 'button', emphasis: 'low' },
-    primary: { buttonType: 'button', emphasis: 'high' },
-    secondary: { buttonType: 'button', emphasis: 'medium' }
-  };
+export async function createButtonContract(
+  request: CreateButtonContractRequest
+): Promise<{ contract: ButtonContract; success: boolean; message: string }> {
+  const useCase = getCreateButtonContractUseCase();
+  return useCase.execute(request);
 }

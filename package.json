@@ -1,16 +1,32 @@
 {
   "name": "@damarkuncoro/agnostic-ui-contract-button",
   "version": "0.0.1",
+  "description": "Button component contracts extending @damarkuncoro/agnostic-ui-contract-core with DDD patterns",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src --ext .ts"
   },
+  "dependencies": {
+    "@damarkuncoro/agnostic-ui-contract-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@damarkuncoro/agnostic-ui-contract-core": "*"
+  },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0"
   }
 }
