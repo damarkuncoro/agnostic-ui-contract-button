@@ -7,11 +7,8 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
-    "lint": "eslint src --ext .ts",
-    "test": "jest"
-  },
-  "dependencies": {
-    "@damarkuncoro/agnostic-ui-contract-box": "file:../agnostic-ui-contract-box"
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts"
   },
   "devDependencies": {
     "typescript": "^5.0.0"
