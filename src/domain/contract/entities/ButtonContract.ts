@@ -1,6 +1,6 @@
 // contract-packages/agnostic-ui-contract-button/src/domain/contract/entities/ButtonContract.ts
 
-import { BaseEntity } from '../../shared/BaseEntity';
+import { BaseEntity } from '@damarkuncoro/agnostic-ui-contract-core';
 import { ContractName } from '@damarkuncoro/agnostic-ui-contract-core';
 import { ButtonVariant } from '../value-objects/ButtonVariant';
 import { 
