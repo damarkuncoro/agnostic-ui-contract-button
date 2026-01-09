@@ -23,7 +23,7 @@ export class ButtonContractFactory implements IButtonContractFactory {
 
     const props = (request.props || []).map((p: { name: string; type: string; required?: boolean; default?: any; enum?: string[]; description?: string }) => ({
       name: p.name,
-      type: p.type,
+      type: p.type as 'string' | 'number' | 'boolean' | 'array' | 'object',
       required: p.required || false,
       default: p.default,
       enum: p.enum,

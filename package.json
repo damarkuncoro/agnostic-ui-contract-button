@@ -2,7 +2,6 @@
   "name": "@damarkuncoro/agnostic-ui-contract-button",
   "version": "0.0.1",
   "description": "Button component contracts extending @damarkuncoro/agnostic-ui-contract-core with DDD patterns",
-  "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "exports": {
@@ -26,8 +25,7 @@
   },
   "devDependencies": {
     "typescript": "^5.0.0",
-    "eslint": "^8.57.0",
-    "@typescript-eslint/parser": "^6.9.0",
-    "@typescript-eslint/eslint-plugin": "^6.9.0"
+    "vitest": "^2.1.9",
+    "@types/node": "^20.0.0"
   }
 }

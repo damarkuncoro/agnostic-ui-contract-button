@@ -45,7 +45,7 @@ export class Button extends BaseEntity {
   private _lastClickedAt?: Date;
   private _accessibilityViolations: string[];
 
-  private domainEvents: any[] = [];
+  protected domainEvents: any[] = [];
 
   private constructor(
     id: string,
@@ -303,7 +303,7 @@ export class Button extends BaseEntity {
   /**
    * Adds a domain event
    */
-  private addDomainEvent(event: any): void {
+  protected addDomainEvent(event: any): void {
     this.domainEvents.push(event);
   }
 

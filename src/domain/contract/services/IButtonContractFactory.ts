@@ -2,7 +2,7 @@
 
 import { ButtonContract } from '../entities/ButtonContract';
 import { ButtonVariant } from '../value-objects/ButtonVariant';
-import type { CreateButtonContractRequest } from '../../application/use-cases/CreateButtonContractUseCase';
+import type { CreateButtonContractRequest } from '../../../application/use-cases/CreateButtonContractUseCase';
 
 /**
  * Button Contract Factory Interface

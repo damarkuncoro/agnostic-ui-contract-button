@@ -33,7 +33,7 @@ export declare class Button extends BaseEntity {
     private _clickCount;
     private _lastClickedAt?;
     private _accessibilityViolations;
-    private domainEvents;
+    protected domainEvents: any[];
     private constructor();
     /**
      * Creates a new Button instance
@@ -104,7 +104,7 @@ export declare class Button extends BaseEntity {
     /**
      * Adds a domain event
      */
-    private addDomainEvent;
+    protected addDomainEvent(event: any): void;
     get buttonType(): ButtonType;
     get state(): ButtonState;
     get emphasis(): ButtonEmphasis;
