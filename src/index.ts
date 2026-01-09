@@ -66,7 +66,7 @@ export {
 // LEGACY COMPATIBILITY EXPORTS (Maintained)
 // =================================================================
 
-// Re-export from contract-box (which includes contract-core)
+// Re-export from contract-core (direct dependency)
 export type {
   UiVariantSize,
   UiVariantIntent,
@@ -74,7 +74,7 @@ export type {
   UiVariantEmphasis,
   UiA11yRole,
   UiA11yKeyboardAction
-} from "@damarkuncoro/agnostic-ui-contract-box"
+} from "@damarkuncoro/agnostic-ui-contract-core"
 
 export {
   uiSizes as uiButtonSizes,
@@ -83,15 +83,15 @@ export {
   uiEmphases as uiButtonEmphases,
   uiA11yRoles,
   uiA11yKeyboardActions
-} from "@damarkuncoro/agnostic-ui-contract-box"
+} from "@damarkuncoro/agnostic-ui-contract-core"
 
 // Button-specific emphasis (DDD-based)
 export type UiButtonEmphasis = "low" | "medium" | "high"
 
 // Legacy type aliases for backward compatibility (deprecated)
-export type UiButtonSize = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantSize
-export type UiButtonIntent = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantIntent
-export type UiButtonTone = import("@damarkuncoro/agnostic-ui-contract-box").UiVariantTone
+export type UiButtonSize = import("@damarkuncoro/agnostic-ui-contract-core").UiVariantSize
+export type UiButtonIntent = import("@damarkuncoro/agnostic-ui-contract-core").UiVariantIntent
+export type UiButtonTone = import("@damarkuncoro/agnostic-ui-contract-core").UiVariantTone
 
 // =================================================================
 // MIGRATION HELPERS
