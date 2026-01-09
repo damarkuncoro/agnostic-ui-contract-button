@@ -13,6 +13,11 @@
 import { CreateButtonContractUseCase } from './application/use-cases/CreateButtonContractUseCase';
 import { ButtonContractFactory } from './infrastructure/factories/ButtonContractFactory';
 import type { IButtonContractFactory } from './domain/contract/services/IButtonContractFactory';
+import { ButtonContractValidator } from './infrastructure/validators/ButtonContractValidator';
+import { ButtonContractRepositoryFactory } from './infrastructure/repositories/ButtonContractRepository';
+import type { IButtonContractRepository } from './domain/contract/services/IButtonContractRepository';
+import type { IButtonValidator } from './domain/contract/services/IButtonValidator';
+import { VariantFactory } from '@damarkuncoro/agnostic-ui-contract-core';
 
 /**
  * Button Contract Service Container
@@ -39,6 +44,20 @@ class ButtonContractServiceContainer {
     this.services.set('IButtonContractFactory', factory);
     this.services.set('ButtonContractFactory', factory);
 
+    // Infrastructure - Validators
+    const validator: IButtonValidator = new ButtonContractValidator();
+    this.services.set('IButtonValidator', validator);
+    this.services.set('ButtonContractValidator', validator);
+
+    // Infrastructure - Repositories
+    const repository: IButtonContractRepository = ButtonContractRepositoryFactory.createInMemory();
+    this.services.set('IButtonContractRepository', repository);
+    this.services.set('ButtonContractRepository', repository);
+
+    // Domain Services - From contract-core
+    const variantFactory = new VariantFactory();
+    this.services.set('VariantFactory', variantFactory);
+
     // Application - Use Cases
     const createUseCase = new CreateButtonContractUseCase(factory);
     this.services.set('CreateButtonContractUseCase', createUseCase);
@@ -60,6 +79,18 @@ class ButtonContractServiceContainer {
   getButtonContractFactory(): ButtonContractFactory {
     return this.get<ButtonContractFactory>('ButtonContractFactory');
   }
+
+  getButtonContractValidator(): ButtonContractValidator {
+    return this.get<ButtonContractValidator>('ButtonContractValidator');
+  }
+
+  getButtonContractRepository(): import('./infrastructure/repositories/ButtonContractRepository').InMemoryButtonContractRepository {
+    return this.get<import('./infrastructure/repositories/ButtonContractRepository').InMemoryButtonContractRepository>('ButtonContractRepository');
+  }
+
+  getVariantFactory(): VariantFactory {
+    return this.get<VariantFactory>('VariantFactory');
+  }
 }
 
 // Export singleton instance
@@ -77,4 +108,16 @@ export function getButtonContractFactory(): ButtonContractFactory {
 // Export service locator function for generic access
 export function getButtonContractService<T>(serviceName: string): T {
   return buttonContractServiceContainer.get<T>(serviceName);
+}
+
+export function getButtonContractValidator(): ButtonContractValidator {
+  return buttonContractServiceContainer.getButtonContractValidator();
+}
+
+export function getButtonContractRepository(): import('./infrastructure/repositories/ButtonContractRepository').InMemoryButtonContractRepository {
+  return buttonContractServiceContainer.getButtonContractRepository();
+}
+
+export function getVariantFactory(): VariantFactory {
+  return buttonContractServiceContainer.getVariantFactory();
 }

@@ -56,7 +56,10 @@ export type {
 // services and their dependencies.
 export {
   getButtonContractService,
-  getCreateButtonContractUseCase
+  getCreateButtonContractUseCase,
+  getButtonContractValidator,
+  getButtonContractRepository,
+  getVariantFactory
 } from './bootstrap';
 
 // =================================================================
@@ -131,7 +134,7 @@ export function createStandardButtonContract(name: string): ButtonContract {
  */
 export async function createButtonContract(
   request: CreateButtonContractRequest
-): Promise<{ contract: ButtonContract; success: boolean; message: string }> {
+): Promise<{ contract: ButtonContract | null; success: boolean; message: string }> {
   const useCase = getCreateButtonContractUseCase();
   return useCase.execute(request);
 }
