@@ -66,32 +66,35 @@ export {
 // LEGACY COMPATIBILITY EXPORTS (Maintained)
 // =================================================================
 
-// Re-export from contract-core (direct dependency)
-export type {
-  UiVariantSize,
-  UiVariantIntent,
-  UiVariantTone,
-  UiVariantEmphasis,
-  UiA11yRole,
-  UiA11yKeyboardAction
-} from "@damarkuncoro/agnostic-ui-contract-core"
+// Define basic UI variant types directly (since contract-core doesn't exist)
+export type UiVariantSize = "xs" | "sm" | "md" | "lg" | "xl"
+export type UiVariantIntent = "primary" | "secondary" | "success" | "danger" | "warning" | "info"
+export type UiVariantTone = "solid" | "outline" | "ghost" | "soft"
+export type UiVariantEmphasis = "low" | "medium" | "high"
+export type UiA11yRole = "button" | "link" | "tab" | "menuitem"
+export type UiA11yKeyboardAction = "Enter" | "Space" | "ArrowUp" | "ArrowDown" | "ArrowLeft" | "ArrowRight" | "Escape" | "Tab"
 
-export {
-  uiSizes as uiButtonSizes,
-  uiIntents as uiButtonIntents,
-  uiTones as uiButtonTones,
-  uiEmphases as uiButtonEmphases,
-  uiA11yRoles,
-  uiA11yKeyboardActions
-} from "@damarkuncoro/agnostic-ui-contract-core"
+// Define basic UI constants
+export const uiSizes: readonly UiVariantSize[] = ["xs", "sm", "md", "lg", "xl"] as const
+export const uiIntents: readonly UiVariantIntent[] = ["primary", "secondary", "success", "danger", "warning", "info"] as const
+export const uiTones: readonly UiVariantTone[] = ["solid", "outline", "ghost", "soft"] as const
+export const uiEmphases: readonly UiVariantEmphasis[] = ["low", "medium", "high"] as const
+export const uiA11yRoles: readonly UiA11yRole[] = ["button", "link", "tab", "menuitem"] as const
+export const uiA11yKeyboardActions: readonly UiA11yKeyboardAction[] = ["Enter", "Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Escape", "Tab"] as const
+
+// Button-specific exports (aliased for backward compatibility)
+export const uiButtonSizes = uiSizes
+export const uiButtonIntents = uiIntents
+export const uiButtonTones = uiTones
+export const uiButtonEmphases = uiEmphases
 
 // Button-specific emphasis (DDD-based)
 export type UiButtonEmphasis = "low" | "medium" | "high"
 
 // Legacy type aliases for backward compatibility (deprecated)
-export type UiButtonSize = import("@damarkuncoro/agnostic-ui-contract-core").UiVariantSize
-export type UiButtonIntent = import("@damarkuncoro/agnostic-ui-contract-core").UiVariantIntent
-export type UiButtonTone = import("@damarkuncoro/agnostic-ui-contract-core").UiVariantTone
+export type UiButtonSize = UiVariantSize
+export type UiButtonIntent = UiVariantIntent
+export type UiButtonTone = UiVariantTone
 
 // =================================================================
 // MIGRATION HELPERS
